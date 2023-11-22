@@ -16,3 +16,4 @@ jobs:
         run: |
           wget -q -O - https://dl.openfoam.com/add-debian-repo.sh | sudo bash
           sudo apt-get install -qq openfoam2212-dev  
+ 
