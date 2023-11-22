@@ -1,0 +1,19 @@
+name: OpenFOAM Continuous Integration
+
+on:
+  push: 
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use OpenFOAM Docker image
+        run: |
+          docker pull quay.io/opencadd/openfoam:7
+          docker run -v $GITHUB_WORKSPACE:/workspace -w /workspace quay.io/opencadd/openfoam:7 /bin/bash -c "./run_openfoam_tests.sh"
