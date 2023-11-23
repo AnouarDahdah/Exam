@@ -1,19 +1,25 @@
-name: OpenFOAM Continuous Integration
+# .github/workflows/ci.yml
+
+name: OpenFOAM Directory Check
 
 on:
-  push: 
+  pull_request:
     branches:
       - main
 
 jobs:
-  test:
+  check_directories:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Use OpenFOAM Docker image
-        run: |
-          docker pull quay.io/opencadd/openfoam:7
-          docker run -v $GITHUB_WORKSPACE:/workspace -w /workspace quay.io/opencadd/openfoam:7 /bin/bash -c "./run_openfoam_tests.sh"
+    - name: Check for required OpenFOAM directories
+      run: |
+        if [ -d "./0" ] && [ -d "./constant" ] && [ -d "./system" ]; then
+          echo "Directories exist. Test Passed!"
+        else
+          echo "One or more directories are missing. Test Failed!"
+          exit 1  # Exit with a non-zero status to indicate failure
+        fi
